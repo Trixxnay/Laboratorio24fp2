@@ -1,4 +1,6 @@
-public class Mapa {
+import java.io.*;
+public class Mapa implements Serializable {
+    private static final long serialVersionUID = 1L;
     private final int filas;
     private final int columnas;
     private final Soldado[][] mapa;
@@ -66,5 +68,23 @@ public class Mapa {
             : ejercito2.getNombreReino().substring(0, 1);
         String tipoSoldado = soldado.getClass().getSimpleName().substring(0, 1); 
         return tipoSoldado + inicialEjercito; 
+    }
+
+    public void guardarMapa(String rutaArchivo) {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(rutaArchivo))) {
+            out.writeObject(this);
+            System.out.println("Estado del mapa guardado exitosamente.");
+        } catch (IOException e) {
+            System.out.println("Error al guardar el mapa: " + e.getMessage());
+        }
+    }
+
+    public static Mapa cargarMapa(String rutaArchivo) {
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(rutaArchivo))) {
+            return (Mapa) in.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Error al cargar el mapa: " + e.getMessage());
+            return null;
+        }
     }
 }
