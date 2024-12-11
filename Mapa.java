@@ -1,4 +1,6 @@
 import java.io.*;
+import java.util.*;
+
 public class Mapa implements Serializable {
     private static final long serialVersionUID = 1L;
     private final int filas;
@@ -61,7 +63,7 @@ public class Mapa implements Serializable {
             System.out.println();
         }
     }
-    
+
     private String obtenerInicialReino(Soldado soldado, Ejercito ejercito1, Ejercito ejercito2) {
         String inicialEjercito = ejercito1.getSoldados().contains(soldado) 
             ? ejercito1.getNombreReino().substring(0, 1)

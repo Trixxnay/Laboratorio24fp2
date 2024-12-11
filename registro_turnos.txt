@@ -1,0 +1,1 @@
+Turno del jugador 1: Arquero 0 (Imperio Carolingio) se movió a (8, 6)

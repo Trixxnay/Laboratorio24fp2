@@ -27,10 +27,10 @@ public class Main {
         System.out.println("------------------------------------------");
 
         Ejercito ejercito1 = new Ejercito(reinosSeleccionados[0]);
-        ejercito1.generarSoldados(1);
+        ejercito1.generarSoldados(5);
 
         Ejercito ejercito2 = new Ejercito(reinosSeleccionados[1]);
-        ejercito2.generarSoldados(1);
+        ejercito2.generarSoldados(5);
 
         ejercito1.mostrarSoldados();
         System.out.println("------------------------------------------");
@@ -44,17 +44,22 @@ public class Main {
         ejercito1.aplicarBeneficios(territorio);
         ejercito2.aplicarBeneficios(territorio);
 
-        for (Soldado soldado : ejercito1.getSoldados()) {
+        (Soldado soldado : ejercito1.getSoldados()) {
             mapa.colocarSoldado(soldado);
         }
-
         for (Soldado soldado : ejercito2.getSoldados()) {
             mapa.colocarSoldado(soldado);
         }
 
+        // Iniciar el juego
         JuegoDeBatalla juego = new JuegoDeBatalla(mapa, ejercito1, ejercito2);
-        juego.iniciar();
+        String ganador = juego.iniciar();
 
-        scanner.close();
+        // Mostrar el mensaje final con Swing
+        ResultadoFinalSwing.mostrarResultado(ganador, 
+            ganador.equals("Jugador 1") ? reinosSeleccionados[0] : reinosSeleccionados[1]);
+
+        
+
     }
 }
