@@ -9,7 +9,7 @@ public class Batalla {
 
         if (resultado < (double) soldado1.getNivelVida()) {
             soldado1.nivelVida += 1; 
-            System.out.println(soldado1.getNombre() + " gana la batalla contra " + soldado2.getNombre());
+            System.out.println(soldado1.getNombre() + "Universidad " + soldado2.getNombre());
             return soldado1;
         } else {
             soldado2.nivelVida += 1; 
