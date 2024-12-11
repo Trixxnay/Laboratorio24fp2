@@ -1,10 +1,23 @@
 import java.util.*;
+import java.io.*;
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-
+        Random r=new Random();
         Mapa mapa = new Mapa(10, 10);
-
+        ObjectOutputStream fileOut;
+        ObjectInputStream fileInObject;
+        PrintWriter fileOut1;
+        DataInputStream dataIn;
+        
+        try{
+            fileOut=new ObjectOutputStream(new FileOutputStream("Mapa"));
+            fileOut.writeObject(mapa);
+            fileOut.close();
+        }catch(IOException e){
+            System.out.println("Error: " + e.getMessage());
+        }
+        
         System.out.println("\n");
 
         System.out.println("En un mundo donde las ambiciones de poder y gloria dominan los corazones de los gobernantes, "
@@ -17,21 +30,43 @@ public class Main {
         System.out.println("\n");
 
         String[] reinosSeleccionados = Reino.escogerReinos();
+        
+        
+        try{
+            fileOut1=new PrintWriter("Reinos");
+            fileOut1.close();
+            fileOut1=new PrintWriter(new FileWriter("Reinos",true));
+            for (int i=0;i<reinosSeleccionados.length;i++){
+                fileOut1.println(reinosSeleccionados[i]);
+            }
+            fileOut1.close();
+            
+        }catch(IOException e){
+            System.out.println("Error: " + e.getMessage());
+        }
+        Scanner fileIn;
+        try{
+            
+            fileIn=new Scanner(new FileReader("Reinos"));
+            System.out.println("\n\nJugador 1 ha elegido: " + fileIn.nextLine());
+            
+            System.out.println("------------------------------------------");
 
-        System.out.println("Jugador 1 ha elegido: " + reinosSeleccionados[0]);
+            System.out.println("Jugador 2 ha elegido: " + fileIn.nextLine());
 
-        System.out.println("------------------------------------------");
-
-        System.out.println("Jugador 2 ha elegido: " + reinosSeleccionados[1]);
-
-        System.out.println("------------------------------------------");
-
+            System.out.println("------------------------------------------");
+            fileIn.close();
+            
+        }catch(IOException e){
+            System.out.println("Error: " + e.getMessage());
+        }
+        
         Ejercito ejercito1 = new Ejercito(reinosSeleccionados[0]);
-        ejercito1.generarSoldados(1);
+        ejercito1.generarSoldados(r.nextInt(10)+1);
 
         Ejercito ejercito2 = new Ejercito(reinosSeleccionados[1]);
-        ejercito2.generarSoldados(1);
-
+        ejercito2.generarSoldados(r.nextInt(10)+1);
+        
         ejercito1.mostrarSoldados();
         System.out.println("------------------------------------------");
 
@@ -43,13 +78,37 @@ public class Main {
 
         ejercito1.aplicarBeneficios(territorio);
         ejercito2.aplicarBeneficios(territorio);
-
+        
+        try{
+            fileOut=new ObjectOutputStream(new FileOutputStream("Ejercito 1"));
+            for (int i=0;i<ejercito1.getSoldados().size();i++){
+                fileOut.writeObject(ejercito1.getSoldados().get(i));
+            }
+            fileOut.close();
+            fileOut=new ObjectOutputStream(new FileOutputStream("Ejercito 2"));
+            for (int i=0;i<ejercito2.getSoldados().size();i++){
+                fileOut.writeObject(ejercito2.getSoldados().get(i));
+            }
+            fileOut.close();
+        } catch (IOException e){
+            System.out.println("Error :" + e.getMessage());
+        }
+        
         for (Soldado soldado : ejercito1.getSoldados()) {
             mapa.colocarSoldado(soldado);
         }
 
         for (Soldado soldado : ejercito2.getSoldados()) {
             mapa.colocarSoldado(soldado);
+        }
+        
+        /*Actualizar Mapa*/
+        try{
+            fileOut=new ObjectOutputStream(new FileOutputStream("Mapa"));
+            fileOut.writeObject(mapa);
+            fileOut.close();
+        }catch(IOException e){
+            System.out.println("Error: " + e.getMessage());
         }
 
         JuegoDeBatalla juego = new JuegoDeBatalla(mapa, ejercito1, ejercito2);

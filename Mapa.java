@@ -52,21 +52,38 @@ public class Mapa implements Serializable {
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnas; j++) {
                 if (mapa[i][j] == null) {
-                    System.out.print("[   ] ");
+                    System.out.print("[     ] ");
                 } else {
-                    String inicial = obtenerInicialReino(mapa[i][j], ejercito1, ejercito2);
-                    System.out.print("[ " + inicial + " ] ");
+                    if (mapa[i][j].getNumEjercito() == 1){
+                        String inicial = obtenerInicialReino(mapa[i][j], ejercito1);
+                        System.out.print("[ " + inicial + " ] ");
+                    } else if (mapa[i][j].getNumEjercito() == 2){
+                        String inicial = obtenerInicialReino(mapa[i][j], ejercito2);
+                        System.out.print("[ " + inicial + " ] ");
+                    }
                 }
             }
             System.out.println();
         }
     }
     
-    private String obtenerInicialReino(Soldado soldado, Ejercito ejercito1, Ejercito ejercito2) {
-        String inicialEjercito = ejercito1.getSoldados().contains(soldado) 
-            ? ejercito1.getNombreReino().substring(0, 1)
-            : ejercito2.getNombreReino().substring(0, 1);
+    private String obtenerInicialReino(Soldado soldado, Ejercito ejercito1) {
+        String inicialEjercito;
+        if (ejercito1.getSoldados().contains(soldado)) {
+            inicialEjercito = ejercito1.getNombreReino().substring(0, 2);
+        } else {
+            inicialEjercito = ""; // Puedes asignar un valor predeterminado si no se cumple la condición
+        }
         String tipoSoldado = soldado.getClass().getSimpleName().substring(0, 1); 
+        if (ejercito1.getNombreReino().contains("Reino")){
+            String nombreR=ejercito1.getNombreReino();
+            int posicionEspacio = nombreR.lastIndexOf(" ");
+        
+        // Extraer la palabra después del último espacio
+            String nombreReino = nombreR.substring(posicionEspacio + 1);
+            nombreReino=nombreReino.substring(0, 2);
+            return tipoSoldado + nombreReino;
+        }
         return tipoSoldado + inicialEjercito; 
     }
 

@@ -34,6 +34,13 @@ public class JuegoDeBatalla implements Serializable {
     
         while (juegoActivo) {
             mapa.mostrarMapa(ejercito1, ejercito2);
+            
+            if (ejercito1.getSoldados().isEmpty()) {
+                mostrarResultadoFinal("Jugador 2", ejercito1, ejercito2);
+            } else if (ejercito2.getSoldados().isEmpty()) {
+                mostrarResultadoFinal("Jugador 1", ejercito1, ejercito2);
+            }
+            
             System.out.println("\nTurno del jugador " + (turnoJugador1 ? "1" : "2"));
     
             Ejercito ejercitoActual = turnoJugador1 ? ejercito1 : ejercito2;
@@ -86,12 +93,40 @@ public class JuegoDeBatalla implements Serializable {
             } else {
                 System.out.println("Movimiento inválido. Pierdes tu turno.");
             }
-    
+            ObjectOutputStream fileOut;
+            DataOutputStream dataOut;
+            try{
+                System.out.println("Desea guardar partida? (y/n)");
+                char guardar=scanner.next().toUpperCase().charAt(0);
+                if (guardar == 'Y'){
+                    dataOut=new DataOutputStream(new FileOutputStream("Guardar partida"));
+                    dataOut.writeBoolean(true);
+                    dataOut.close();
+                    fileOut=new ObjectOutputStream(new FileOutputStream("Ejercito 1"));
+                    for (int i=0;i<ejercito1.getSoldados().size();i++){
+                        fileOut.writeObject(ejercito1.getSoldados().get(i));
+                    }
+                    fileOut.close();
+                    fileOut=new ObjectOutputStream(new FileOutputStream("Ejercito 2"));
+                    for (int i=0;i<ejercito2.getSoldados().size();i++){
+                        fileOut.writeObject(ejercito2.getSoldados().get(i));
+                    }
+                    fileOut.close();
+                    fileOut=new ObjectOutputStream(new FileOutputStream("Mapa"));
+                    fileOut.writeObject(mapa);
+                    fileOut.close();
+                }
+                
+            } catch (IOException e){
+                System.out.println("Error: " + e.getMessage());
+            }
+            
             if (ejercito1.getSoldados().isEmpty()) {
                 mostrarResultadoFinal("Jugador 2", ejercito1, ejercito2);
             } else if (ejercito2.getSoldados().isEmpty()) {
                 mostrarResultadoFinal("Jugador 1", ejercito1, ejercito2);
             }
+            turnoJugador1=!turnoJugador1;
         }
         System.out.println("Juego terminado.");
     } 
